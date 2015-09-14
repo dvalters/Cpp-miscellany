@@ -18,3 +18,10 @@ print my_rectangle.getLength()
 print my_rectangle.getHeight()
 print my_rectangle.getArea()
 
+name = "Geoff".encode('UTF-8')
+
+my_rectangle.setName(name)
+
+thename = my_rectangle.getName()
+
+print thename

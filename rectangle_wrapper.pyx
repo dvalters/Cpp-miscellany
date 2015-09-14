@@ -1,7 +1,9 @@
 # distutils: language = c++
-# distutils: sources = rectangle.cpp
+# distutils: sources = Rectangle.cpp
+from libcpp.string cimport string
 
-cdef extern from "Rectangle.hpp" namespace "shapes":
+
+cdef extern from "Rectangle.hpp":
     cdef cppclass Rectangle:
         Rectangle(int, int, int, int)
         int x0, y0, x1, y1
@@ -9,6 +11,10 @@ cdef extern from "Rectangle.hpp" namespace "shapes":
         int getHeight()
         int getArea()
         void move(int, int)
+        
+        string name
+        void setName(string)
+        string getName()
 
 cdef class PyRectangle:
     cdef Rectangle *thisptr      # hold a C++ instance which we're wrapping
@@ -24,3 +30,8 @@ cdef class PyRectangle:
         return self.thisptr.getArea()
     def move(self, dx, dy):
         self.thisptr.move(dx, dy)
+        
+    def setName(self, name_in):
+        self.thisptr.setName(name_in)
+    def getName(self):
+        return self.thisptr.getName()
