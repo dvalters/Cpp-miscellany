@@ -18,6 +18,8 @@
 
 #include <iostream>
 #include <netcdf>
+#include "TNT/tnt.h"
+
 using namespace std;
 using namespace netCDF;
 using namespace netCDF::exceptions;
@@ -27,13 +29,6 @@ using namespace netCDF::exceptions;
 static const int NLAT = 6;
 static const int NLON = 12;
 static const int NREC = 2;
-
-// These are used to construct some example data. 
-static const float SAMPLE_PRESSURE = 900.0;
-static const float SAMPLE_TEMP = 9.0;
-static const float START_LAT = 25.0;
-static const float START_LON = -125.0; 
-
 
 // Return this code to the OS in case of failure.
 static const int NC_ERR = 2;
@@ -45,7 +40,23 @@ int main()
    
    // These arrays will hold the data we will read in. We will only
    // need enough space to hold one timestep of data; one record.
-   float pres_in[NREC][NLAT][NLON];
+   //float pres_in[NREC][NLAT][NLON];
+
+   TNT::Array3D<float> pres_in(NREC,NLAT,NLON,0.0);
+
+   for (size_t rec = 0; rec < NREC; rec++)
+   {
+       std::cout << "TIMESTEP: " << rec<< std::endl;
+       for (int lat = 0; lat < NLAT; lat++)
+       {
+         for (int lon = 0; lon < NLON; lon++)
+         {
+           std::cout << pres_in[rec][lat][lon] << " ";
+         }
+         std::cout << std::endl;
+       }
+       std::cout << std::endl;
+   }
    
    try
    {
@@ -61,14 +72,14 @@ int main()
    lonVar.getVar(lons);
    latVar.getVar(lats);
 
-   // Check the coordinate variable data. 
-   for (int lat = 0; lat < NLAT; lat++)
-       if (lats[lat] != START_LAT + 5. * lat)
-	 return NC_ERR;
+//   // Check the coordinate variable data.
+//   for (int lat = 0; lat < NLAT; lat++)
+//       if (lats[lat] != START_LAT + 5. * lat)
+//	 return NC_ERR;
 
-   for (int lon = 0; lon < NLON; lon++)
-      if (lons[lon] != START_LON + 5. * lon)
- 	return NC_ERR;
+//   for (int lon = 0; lon < NLON; lon++)
+//      if (lons[lon] != START_LON + 5. * lon)
+// 	return NC_ERR;
   
    // Get the pressure and temperature variables and read data one time step at a time
    NcVar presVar, tempVar;
@@ -85,11 +96,16 @@ int main()
    //countp.push_back(NREC);
    countp.push_back(NLAT);
    countp.push_back(NLON);
+
+   // Works because the elements are contiguous
+   // in memory.
+   presVar.getVar(&pres_in[0][0][0]);
+
    for (size_t rec = 0; rec < NREC; rec++)
    {
      // Read the data one record at a time.
      startp[0]=rec;
-     presVar.getVar(&pres_in[rec][0][0]);
+
      
      int i=0;  //used in the data generation loop
      //for (int timestep = 0; timestep < NREC; timestep++)
@@ -105,7 +121,7 @@ int main()
        }
        std::cout << std::endl;
      
-   } // next record 
+   } // next record
        
    // The file is automatically closed by the destructor. This frees
    // up any internal netCDF resources associated with the file, and
@@ -121,5 +137,4 @@ int main()
       cout<<"FAILURE**************************"<<endl;
       return NC_ERR;
    }
-  
 }
