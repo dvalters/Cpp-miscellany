@@ -4,9 +4,11 @@
  * array. 
  */
 
+#include <stdint.h>
+
 // Treat buf[] as a giant little-endian integer, grab
 // width bits starting at bit number pos. (LSB=bit 0).
-unint64_t bit_extract_lsb(const uint8_t *buf, size_t pos, int width)
+uint64_t bit_extract_lsb(const uint8_t *buf, size_t pos, int width)
 {
   assert(width >= 0 && width <= 64 - 7);
   
