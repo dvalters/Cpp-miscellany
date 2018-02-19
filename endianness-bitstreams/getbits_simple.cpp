@@ -5,6 +5,7 @@
  */
 
 #include <stdint.h>
+#include <cstddef>
 
 // Treat buf[] as a giant little-endian integer, grab
 // width bits starting at bit number pos. (LSB=bit 0).
