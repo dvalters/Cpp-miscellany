@@ -16,7 +16,7 @@ uint64_t bit_extract_lsb(const uint8_t *buf, size_t pos, int width)
   
   // Read a 64-bit little-endian number starting from the byte
   // containing bit number pos (relative to buf)
-  uint64_t bits = read64LE(&buf[pos / 8];
+  uint64_t bits = read64LE(&buf[pos / 8]);
   
   // Shift out the bits inside the first byte that we've already
   // consumed.
@@ -35,7 +35,7 @@ size_t bit_pos;  // current position in the stream
 uint64_t getbits_extract_lsb(int width)
 {
   // Read the bits
-  unit64_t result = bit_extract_lsb(bitstream, bit_pos, width);
+  uint64_t result = bit_extract_lsb(bitstream, bit_pos, width);
   // Advance the cursor
   bit_pos += width;
   return result;
