@@ -24,7 +24,7 @@ uint64_t bit_extract_lsb(const uint8_t *buf, size_t pos, int width)
   bits >>= pos % 8;
 
   // Return the low width bits, zeroing the rest via a bit mask
-  return bits & ((1lull << width) - 1);
+  return bits & ((1ull << width) - 1);
 }
 
 // State variable, assumed to be local variables, or factored 
